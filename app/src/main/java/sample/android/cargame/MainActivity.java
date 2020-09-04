@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             accellerator = new Pedal(MainActivity.this, 10, 500, R.drawable.accellerator, R.drawable.accellerator_pressed);
             brake = new Pedal(MainActivity.this, 200, 500, R.drawable.brake, R.drawable.brake_pressed);
             car = new Car(MainActivity.this, accellerator, brake, surfaceHeight);
-            Balloon balloonYellow = new Balloon(MainActivity.this, R.drawable.balloon_yellow, 0, surfaceWidth, surfaceHeight, car);
+            Balloons balloons = new Balloons(MainActivity.this, 8, surfaceWidth, surfaceHeight, car);
 
             while (isRunning) {
                 Canvas canvas = surfaceHolder.lockCanvas();
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                     canvas.drawRect(0, 0, surfaceWidth - 1, surfaceHeight - 1, skyPaint);
                     mountain.draw(canvas);
                     car.draw(canvas);
-                    balloonYellow.draw(canvas);
+                    balloons.draw(canvas);
                     accellerator.draw(canvas);
                     brake.draw(canvas);
                     surfaceHolder.unlockCanvasAndPost(canvas);
