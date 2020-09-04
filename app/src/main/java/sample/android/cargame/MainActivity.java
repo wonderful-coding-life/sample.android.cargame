@@ -77,31 +77,20 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private class GamePlayThread extends Thread {
+        private Pedal accellerator;
+        private Pedal brake;
 
-        private int accelleratorX = 10;
-        private int accelleratorY = 500;
-        private int brakeX = 200;
-        private int brakeY = 500;
-        private Bitmap accelleratorBitmap;
-        private Bitmap accelleratorPressedBitmap;
-        private Bitmap brakeBitmap;
-        private Bitmap brakePressedBitmap;
-
-        private boolean accelleratorPressed = false;
-        private boolean brakePressed = false;
         public void press(boolean press, int x, int y) {
-
             if (press == true) {
-                if (accelleratorX < x && x < accelleratorX + accelleratorBitmap.getWidth() && accelleratorY < y && y < accelleratorY + accelleratorBitmap.getHeight()) {
-                    accelleratorPressed = true;
-                } else if (brakeX < x && x < brakeX + brakeBitmap.getWidth() && brakeY < y && y < brakeY + brakeBitmap.getHeight()) {
-                    brakePressed = true;
+                if (accellerator.isHit(x, y) == true) {
+                    accellerator.press(true);
+                } else if (brake.isHit(x, y) == true) {
+                    brake.press(true);
                 }
             } else {
-                accelleratorPressed = false;
-                brakePressed = false;
+                accellerator.press(false);
+                brake.press(false);
             }
-
         }
 
         @Override
@@ -111,67 +100,22 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             Paint skyPaint = new Paint();
             skyPaint.setColor(getResources().getColor(R.color.colorSky, null));
 
-            Bitmap mountainBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mountain);
-            int mountain1X = 0;
-            int mountain2X = mountainBitmap.getWidth();
-            int mountainY = surfaceHeight - mountainBitmap.getHeight();
-
-            Bitmap carBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.car);
-            int carX = 0;
-            int carY = surfaceHeight - carBitmap.getHeight();
-
-            accelleratorBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.accellerator);
-            accelleratorPressedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.accellerator_pressed);
-            brakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.brake);
-            brakePressedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.brake_pressed);
+            Mountain mountain = new Mountain(MainActivity.this, surfaceHeight);
+            accellerator = new Pedal(MainActivity.this, 10, 500, R.drawable.accellerator, R.drawable.accellerator_pressed);
+            brake = new Pedal(MainActivity.this, 200, 500, R.drawable.brake, R.drawable.brake_pressed);
+            Car car = new Car(MainActivity.this, accellerator, brake, surfaceHeight);
 
             while (isRunning) {
                 Canvas canvas = surfaceHolder.lockCanvas();
                 if (canvas != null) {
-
-                    // draw rect with full screen size in black
                     canvas.drawRect(0, 0, surfaceWidth - 1, surfaceHeight - 1, skyPaint);
-
-                    // draw mountain
-                    canvas.drawBitmap(mountainBitmap, mountain1X, mountainY, null);
-                    canvas.drawBitmap(mountainBitmap, mountain2X, mountainY, null);
-                    mountain1X -= 10;
-                    mountain2X -= 10;
-                    if (mountain1X + mountainBitmap.getWidth() < 0) {
-                        mountain1X = mountain2X + mountainBitmap.getWidth();
-                    }
-                    if (mountain2X + mountainBitmap.getWidth() < 0) {
-                        mountain2X = mountain1X + mountainBitmap.getWidth();
-                    }
-
-                    // draw car bitmap at carX, carY on canvas
-                    canvas.drawBitmap(carBitmap, carX, carY, null);
-
-                    if (accelleratorPressed == true) {
-                        carX += 5;
-                    }
-                    if (brakePressed == true) {
-                        carX -= 5;
-                    }
-
-                    if (accelleratorPressed == true) {
-                        canvas.drawBitmap(accelleratorPressedBitmap, accelleratorX, accelleratorY, null);
-                    } else {
-                        canvas.drawBitmap(accelleratorBitmap, accelleratorX, accelleratorY, null);
-                    }
-                    if (brakePressed == true) {
-                        canvas.drawBitmap(brakePressedBitmap, brakeX, brakeY, null);
-                    } else {
-                        canvas.drawBitmap(brakeBitmap, brakeX, brakeY, null);
-                    }
-
+                    mountain.draw(canvas);
+                    car.draw(canvas);
+                    accellerator.draw(canvas);
+                    brake.draw(canvas);
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
         }
     }
-
-
-
-
 }
