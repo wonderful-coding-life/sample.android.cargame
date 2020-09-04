@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private class GamePlayThread extends Thread {
         private Pedal accellerator;
         private Pedal brake;
+        private Car car;
 
         public void press(boolean press, int x, int y) {
             if (press == true) {
@@ -103,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             Mountain mountain = new Mountain(MainActivity.this, surfaceHeight);
             accellerator = new Pedal(MainActivity.this, 10, 500, R.drawable.accellerator, R.drawable.accellerator_pressed);
             brake = new Pedal(MainActivity.this, 200, 500, R.drawable.brake, R.drawable.brake_pressed);
-            Car car = new Car(MainActivity.this, accellerator, brake, surfaceHeight);
+            car = new Car(MainActivity.this, accellerator, brake, surfaceHeight);
+            Balloon balloonYellow = new Balloon(MainActivity.this, R.drawable.balloon_yellow, 0, surfaceWidth, surfaceHeight, car);
 
             while (isRunning) {
                 Canvas canvas = surfaceHolder.lockCanvas();
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                     canvas.drawRect(0, 0, surfaceWidth - 1, surfaceHeight - 1, skyPaint);
                     mountain.draw(canvas);
                     car.draw(canvas);
+                    balloonYellow.draw(canvas);
                     accellerator.draw(canvas);
                     brake.draw(canvas);
                     surfaceHolder.unlockCanvasAndPost(canvas);
