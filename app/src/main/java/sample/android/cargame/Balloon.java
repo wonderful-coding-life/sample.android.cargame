@@ -4,10 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+
+import java.util.List;
 
 public class Balloon {
     private static final int FONT_SIZE = 32;
@@ -19,9 +22,11 @@ public class Balloon {
     private Paint paint;
     private Car car;
     private boolean isVisible;
+    private List<Bitmap> bitmapList;
 
-    public Balloon(Context context, int resourceId, int y, int surfaceWidth, int surfaceHeight, Car car) {
-        bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+    public Balloon(Context context, List<Bitmap> bitmapList, int y, int surfaceWidth, int surfaceHeight, Car car) {
+        this.bitmapList = bitmapList;
+        bitmap = bitmapList.get((int)(Math.random() * bitmapList.size()));
         isVisible = true;
         this.x = (int)(Math.random() * (surfaceWidth - bitmap.getWidth()));
         this.y = y;
@@ -31,6 +36,7 @@ public class Balloon {
 
         number = (int)(Math.random() * 90) + 10;
         paint = new Paint();
+
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float fontSizeInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE, displayMetrics);
         paint.setTextSize(fontSizeInPixel);
@@ -57,6 +63,7 @@ public class Balloon {
             x = (int)(Math.random() * (surfaceWidth - bitmap.getWidth()));
             y = 0 - bitmap.getHeight();
             isVisible = true;
+            bitmap = bitmapList.get((int)(Math.random() * bitmapList.size()));
         }
     }
 
