@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnTouchListener {
 
+    private GameMode gameMode;
     private GamePlayThread gamePlayThread;
     private SurfaceHolder surfaceHolder;
     private boolean isRunning;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         surfaceWidth = width;
         surfaceHeight = height;
 
+        gameMode = GameMode.Ready;
         gamePlayThread = new GamePlayThread();
         isRunning = true;
         gamePlayThread.start();
@@ -77,22 +79,34 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private class GamePlayThread extends Thread {
+        private GameStart gameStart;
         private Pedal accellerator, brake;
         private Jump jump;
         private Car car;
 
         public void press(boolean press, int x, int y) {
-            if (press == true) {
-                if (accellerator.isHit(x, y) == true) {
-                    accellerator.press(true);
-                } else if (brake.isHit(x, y) == true) {
-                    brake.press(true);
-                } else if (jump.isHit(x, y) == true) {
-                    car.jump();
-                }
-            } else {
-                accellerator.press(false);
-                brake.press(false);
+            switch (gameMode) {
+                case Ready:
+                    if (gameStart.isHit(x, y) == true) {
+                        gameMode = GameMode.Play;
+                    }
+                    break;
+                case Play:
+                    if (press == true) {
+                        if (accellerator.isHit(x, y) == true) {
+                            accellerator.press(true);
+                        } else if (brake.isHit(x, y) == true) {
+                            brake.press(true);
+                        } else if (jump.isHit(x, y) == true) {
+                            car.jump();
+                        }
+                    } else {
+                        accellerator.press(false);
+                        brake.press(false);
+                    }
+                    break;
+                case Completed:
+                    break;
             }
         }
 
@@ -104,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             skyPaint.setColor(getResources().getColor(R.color.colorSky, null));
 
             Mountain mountain = new Mountain(MainActivity.this, surfaceHeight);
+            gameStart = new GameStart(MainActivity.this, surfaceWidth, surfaceHeight);
             accellerator = new Pedal(MainActivity.this, 10, 500, R.drawable.accellerator, R.drawable.accellerator_pressed);
             brake = new Pedal(MainActivity.this, 200, 500, R.drawable.brake, R.drawable.brake_pressed);
             jump = new Jump(MainActivity.this, 400, 500);
@@ -116,15 +131,28 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 if (canvas != null) {
                     canvas.drawRect(0, 0, surfaceWidth - 1, surfaceHeight - 1, skyPaint);
                     mountain.draw(canvas);
-                    car.draw(canvas);
-                    balloons.draw(canvas);
-                    accellerator.draw(canvas);
-                    brake.draw(canvas);
-                    jump.draw(canvas);
-                    obstacle.draw(canvas);
+                    switch (gameMode) {
+                        case Ready:
+                            gameStart.draw(canvas);
+                            break;
+                        case Play:
+                            car.draw(canvas);
+                            balloons.draw(canvas);
+                            accellerator.draw(canvas);
+                            brake.draw(canvas);
+                            jump.draw(canvas);
+                            obstacle.draw(canvas);
+                            break;
+                        case Completed:
+                            break;
+                    }
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
         }
+    }
+
+    private enum GameMode {
+        Ready, Play, Completed
     }
 }
