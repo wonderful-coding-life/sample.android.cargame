@@ -31,6 +31,10 @@ public class Car {
         }
     }
 
+    public void moveX(int x) {
+        this.x += x;
+    }
+
     public Rect getRect() {
         return new Rect(x, y, x + bitmap.getWidth() - 1, y + bitmap.getHeight() - 1);
     }
