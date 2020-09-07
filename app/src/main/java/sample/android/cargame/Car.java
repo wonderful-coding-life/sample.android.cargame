@@ -30,13 +30,10 @@ public class Car {
         for (int i = 0; i < jumpSteps.length; i++) {
             sum += jumpSteps[i];
         }
-        Log.i("sum", "sum = " + sum);
-
     }
 
     public void draw(Canvas canvas) {
         if (isJumping) {
-            Log.i("step", "index=" + jumpIndex + ", step = " + (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, jumpSteps[jumpIndex], context.getResources().getDisplayMetrics()));
             y += (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, jumpSteps[jumpIndex], context.getResources().getDisplayMetrics());
             jumpIndex++;
             if (jumpIndex >= jumpSteps.length) {
