@@ -8,21 +8,20 @@ import android.graphics.Rect;
 import android.util.TypedValue;
 
 public class Obstacle {
-
-    private Context context;
+    private MainActivity mainActivity;
     private int surfaceWidth, surfaceHeight;
     private Car car;
     private int x, y;
     private Bitmap bitmap, stoneBitmap, waterBitmap;
     private boolean isValid;
 
-    public Obstacle(Context context, int surfaceWidth, int surfaceHeight, Car car) {
-        this.context = context;
+    public Obstacle(MainActivity mainActivity, int surfaceWidth, int surfaceHeight, Car car) {
+        this.mainActivity = mainActivity;
         this.surfaceWidth = surfaceWidth;
         this.surfaceHeight = surfaceHeight;
         this.car = car;
-        stoneBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_stone);
-        waterBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_water);
+        stoneBitmap = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.ic_stone);
+        waterBitmap = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.ic_water);
         reset();
     }
 
@@ -39,7 +38,7 @@ public class Obstacle {
 
     public void draw(Canvas canvas) {
         if (isValid == true && getCollisionRect().intersect(car.getCollisionRect())) {
-            int movement = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, context.getResources().getDisplayMetrics());
+            int movement = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, mainActivity.getResources().getDisplayMetrics());
             if (bitmap == stoneBitmap) {
                 car.moveX(-movement);
                 isValid = false;
@@ -47,6 +46,7 @@ public class Obstacle {
                 car.moveX(movement);
                 isValid = false;
             }
+            mainActivity.hitObstacle();
         }
         canvas.drawBitmap(bitmap, x, surfaceHeight - bitmap.getHeight(), null);
         x -= 5;

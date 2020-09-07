@@ -18,11 +18,12 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnTouchListener {
 
-    private GameMode gameMode;
     private GamePlayThread gamePlayThread;
     private SurfaceHolder surfaceHolder;
     private boolean isRunning;
-    private int surfaceWidth, surfaceHeight;
+    private int hitCount;
+    public GameMode gameMode;
+    public int surfaceWidth, surfaceHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         mainSurfaceViwe.setOnTouchListener(this);
         surfaceHolder = mainSurfaceViwe.getHolder();
         surfaceHolder.addCallback(this);
-
     }
 
     @Override
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int format, int width, int height) {
         surfaceWidth = width;
         surfaceHeight = height;
-
         gameMode = GameMode.Ready;
         gamePlayThread = new GamePlayThread();
         isRunning = true;
@@ -78,8 +77,16 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         isRunning = false;
     }
 
+    public void hitObstacle() {
+        hitCount++;
+        if (hitCount > 2) {
+            gameMode = GameMode.Completed;
+        }
+    }
+
     private class GamePlayThread extends Thread {
         private GameStart gameStart;
+        private GameCompleted gameCompleted;
         private Pedal accellerator, brake;
         private Jump jump;
         private Car car;
@@ -87,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         public void press(boolean press, int x, int y) {
             switch (gameMode) {
                 case Ready:
-                    if (gameStart.isHit(x, y) == true) {
+                    if (press == true && gameStart.isHit(x, y) == true) {
                         gameMode = GameMode.Play;
                     }
                     break;
@@ -106,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                     }
                     break;
                 case Completed:
+                    if (press == true && gameCompleted.isHit(x, y) == true) {
+                        gameMode = GameMode.Ready;
+                        hitCount = 0;
+                    }
                     break;
             }
         }
@@ -119,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
             Mountain mountain = new Mountain(MainActivity.this, surfaceHeight);
             gameStart = new GameStart(MainActivity.this, surfaceWidth, surfaceHeight);
+            gameCompleted = new GameCompleted(MainActivity.this, surfaceWidth, surfaceHeight);
             accellerator = new Pedal(MainActivity.this, 10, 500, R.drawable.accellerator, R.drawable.accellerator_pressed);
             brake = new Pedal(MainActivity.this, 200, 500, R.drawable.brake, R.drawable.brake_pressed);
             jump = new Jump(MainActivity.this, 400, 500);
@@ -144,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                             obstacle.draw(canvas);
                             break;
                         case Completed:
+                            gameCompleted.draw(canvas);
                             break;
                     }
                     surfaceHolder.unlockCanvasAndPost(canvas);
