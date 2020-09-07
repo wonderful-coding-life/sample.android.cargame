@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 
 import java.util.List;
@@ -23,9 +24,13 @@ public class Balloon {
     private Car car;
     private boolean isVisible;
     private List<Bitmap> bitmapList;
+    private int fireworksIndex;
+    private List<Bitmap> fireworksBitmapList;
 
-    public Balloon(Context context, List<Bitmap> bitmapList, int y, int surfaceWidth, int surfaceHeight, Car car) {
+    public Balloon(Context context, List<Bitmap> bitmapList, List<Bitmap> fireworksBitmapList, int y, int surfaceWidth, int surfaceHeight, Car car) {
         this.bitmapList = bitmapList;
+        this.fireworksBitmapList = fireworksBitmapList;
+
         bitmap = bitmapList.get((int)(Math.random() * bitmapList.size()));
         isVisible = true;
         this.x = (int)(Math.random() * (surfaceWidth - bitmap.getWidth()));
@@ -45,8 +50,9 @@ public class Balloon {
 
     public void draw(Canvas canvas) {
 
-        if (getCollisionRect().intersect(car.getCollisionRect())) {
+        if (isVisible == true && getCollisionRect().intersect(car.getCollisionRect())) {
             isVisible = false;
+            fireworksIndex = 0;
         }
 
         if (isVisible) {
@@ -54,6 +60,11 @@ public class Balloon {
             String numberString = String.valueOf(number);
             float numberX = (bitmap.getWidth() - paint.measureText(numberString)) / 2;
             canvas.drawText(String.valueOf(number), x + numberX, y + (float) (bitmap.getHeight() * 0.70), paint);
+        } else {
+            if (fireworksIndex < fireworksBitmapList.size() * 5) {
+                canvas.drawBitmap(fireworksBitmapList.get(fireworksIndex / 5), x, y, null);
+                ++fireworksIndex;
+            }
         }
 
         y += 5;

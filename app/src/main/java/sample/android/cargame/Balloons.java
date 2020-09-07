@@ -11,6 +11,7 @@ import java.util.List;
 public class Balloons {
     private List<Balloon> balloons = new ArrayList<>();
     private List<Bitmap> balloonBitmaps = new ArrayList<>();
+    private List<Bitmap> fireworksBitmaps = new ArrayList<>();
 
     public Balloons(Context context, int numBalloons, int surfaceWidth, int surfaceHeight, Car car) {
         balloonBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_black));
@@ -19,9 +20,15 @@ public class Balloons {
         balloonBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_gray));
         balloonBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_green));
 
+        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks0));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks1));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks2));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks3));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks4));
+
         int balloonGap = surfaceHeight / (numBalloons - 1);
         for (int i = 0; i < numBalloons; i++) {
-            balloons.add(new Balloon(context, balloonBitmaps, i * -balloonGap, surfaceWidth, surfaceHeight, car));
+            balloons.add(new Balloon(context, balloonBitmaps, fireworksBitmaps, i * -balloonGap, surfaceWidth, surfaceHeight, car));
         }
     }
 
