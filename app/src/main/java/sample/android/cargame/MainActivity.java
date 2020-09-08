@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 case Ready:
                     if (press == true && gameStart.isHit(x, y) == true) {
                         gameMode = GameMode.Play;
+                        hitCount = 0;
                     }
                     break;
                 case Play:
@@ -113,9 +114,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                     }
                     break;
                 case Completed:
-                    if (press == true && gameCompleted.isHit(x, y) == true) {
-                        gameMode = GameMode.Ready;
-                        hitCount = 0;
+                    if (press == true) {
+                        if (gameCompleted.isHitBack(x, y) == true) {
+                            gameMode = GameMode.Play;
+                            hitCount = 0;
+                        } else if (gameCompleted.isHitHome(x, y) == true) {
+                            gameMode = GameMode.Ready;
+                        }
                     }
                     break;
             }
