@@ -15,6 +15,10 @@ public class ScoreBoard extends GameObject {
         this.mainActivity = mainActivity;
         setBitmap(R.drawable.score_board);
         setXYdp(10, 30);
+        reset();
+    }
+
+    public void reset() {
         score = 0;
     }
 

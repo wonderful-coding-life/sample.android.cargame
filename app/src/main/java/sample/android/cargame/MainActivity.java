@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                     if (press == true && gameStart.isHit(x, y) == true) {
                         gameMode = GameMode.Play;
                         hitCount = 0;
+                        scoreBoard.reset();
+                        balloons.reset();
                     }
                     break;
                 case Play:
@@ -121,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         if (gameCompleted.isHitBack(x, y) == true) {
                             gameMode = GameMode.Play;
                             hitCount = 0;
+                            scoreBoard.reset();
+                            balloons.reset();
                         } else if (gameCompleted.isHitHome(x, y) == true) {
                             gameMode = GameMode.Ready;
                         }

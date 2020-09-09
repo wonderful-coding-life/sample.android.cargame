@@ -26,24 +26,30 @@ public class Balloon {
     private int fireworksIndex;
     private List<Bitmap> fireworksBitmapList;
 
-    public Balloon(MainActivity mainActivity, List<Bitmap> bitmapList, List<Bitmap> fireworksBitmapList, int y) {
+    public Balloon(MainActivity mainActivity, List<Bitmap> bitmapList, List<Bitmap> fireworksBitmapList) {
         this.mainActivity = mainActivity;
         this.bitmapList = bitmapList;
         this.fireworksBitmapList = fireworksBitmapList;
-
         bitmap = bitmapList.get((int)(Math.random() * bitmapList.size()));
         isVisible = true;
-        this.x = (int)(Math.random() * (mainActivity.surfaceWidth - bitmap.getWidth()));
-        this.y = y;
-
         number = (int)(Math.random() * 90) + 10;
-
         paint = new Paint();
-
         DisplayMetrics displayMetrics = mainActivity.getResources().getDisplayMetrics();
         float fontSizeInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE, displayMetrics);
         paint.setTextSize(fontSizeInPixel);
         paint.setColor(mainActivity.getResources().getColor(R.color.colorPrimaryDark, null));
+    }
+
+    public void setXY(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getWidth() {
+        if (bitmap != null) {
+            return bitmap.getWidth();
+        }
+        return 0;
     }
 
     public void draw(Canvas canvas) {

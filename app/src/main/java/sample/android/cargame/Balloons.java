@@ -9,11 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Balloons {
+    private MainActivity mainActivity;
+    private int numBalloons;
     private List<Balloon> balloons = new ArrayList<>();
     private List<Bitmap> balloonBitmaps = new ArrayList<>();
     private List<Bitmap> fireworksBitmaps = new ArrayList<>();
 
     public Balloons(MainActivity mainActivity, int numBalloons) {
+        this.mainActivity = mainActivity;
+        this.numBalloons = numBalloons;
         balloonBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.balloon_black));
         balloonBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.balloon_red));
         balloonBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.balloon_yellow));
@@ -26,9 +30,17 @@ public class Balloons {
         fireworksBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.fireworks3));
         fireworksBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.fireworks4));
 
-        int balloonGap = mainActivity.surfaceHeight / (numBalloons - 1);
         for (int i = 0; i < numBalloons; i++) {
-            balloons.add(new Balloon(mainActivity, balloonBitmaps, fireworksBitmaps, i * -balloonGap));
+            balloons.add(new Balloon(mainActivity, balloonBitmaps, fireworksBitmaps));
+        }
+        reset();
+    }
+
+    public void reset() {
+        int balloonGap = mainActivity.surfaceHeight / (numBalloons - 1);
+        for (int i = 0; i < balloons.size(); i++) {
+            Balloon balloon = balloons.get(i);
+            balloon.setXY((int)(Math.random() * (mainActivity.surfaceWidth - balloon.getWidth())), i * -balloonGap);
         }
     }
 
