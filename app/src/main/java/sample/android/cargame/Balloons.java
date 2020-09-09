@@ -13,22 +13,22 @@ public class Balloons {
     private List<Bitmap> balloonBitmaps = new ArrayList<>();
     private List<Bitmap> fireworksBitmaps = new ArrayList<>();
 
-    public Balloons(Context context, int numBalloons, int surfaceWidth, int surfaceHeight, Car car) {
-        balloonBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_black));
-        balloonBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_red));
-        balloonBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_yellow));
-        balloonBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_gray));
-        balloonBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.balloon_green));
+    public Balloons(MainActivity mainActivity, int numBalloons) {
+        balloonBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.balloon_black));
+        balloonBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.balloon_red));
+        balloonBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.balloon_yellow));
+        balloonBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.balloon_gray));
+        balloonBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.balloon_green));
 
-        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks0));
-        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks1));
-        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks2));
-        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks3));
-        fireworksBitmaps.add(BitmapFactory.decodeResource(context.getResources(), R.drawable.fireworks4));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.fireworks0));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.fireworks1));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.fireworks2));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.fireworks3));
+        fireworksBitmaps.add(BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.fireworks4));
 
-        int balloonGap = surfaceHeight / (numBalloons - 1);
+        int balloonGap = mainActivity.surfaceHeight / (numBalloons - 1);
         for (int i = 0; i < numBalloons; i++) {
-            balloons.add(new Balloon(context, balloonBitmaps, fireworksBitmaps, i * -balloonGap, surfaceWidth, surfaceHeight, car));
+            balloons.add(new Balloon(mainActivity, balloonBitmaps, fireworksBitmaps, i * -balloonGap));
         }
     }
 
@@ -36,5 +36,9 @@ public class Balloons {
         for (Balloon balloon : balloons) {
             balloon.draw(canvas);
         }
+    }
+
+    public List<Balloon> getBalloons() {
+        return balloons;
     }
 }

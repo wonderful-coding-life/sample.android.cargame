@@ -16,43 +16,47 @@ import java.util.List;
 public class Balloon {
     private static final int FONT_SIZE = 32;
 
+    private MainActivity mainActivity;
     private Bitmap bitmap;
     private int x, y;
-    private int surfaceWidth, surfaceHeight;
     private int number;
     private Paint paint;
-    private Car car;
     private boolean isVisible;
     private List<Bitmap> bitmapList;
     private int fireworksIndex;
     private List<Bitmap> fireworksBitmapList;
 
-    public Balloon(Context context, List<Bitmap> bitmapList, List<Bitmap> fireworksBitmapList, int y, int surfaceWidth, int surfaceHeight, Car car) {
+    public Balloon(MainActivity mainActivity, List<Bitmap> bitmapList, List<Bitmap> fireworksBitmapList, int y) {
+        this.mainActivity = mainActivity;
         this.bitmapList = bitmapList;
         this.fireworksBitmapList = fireworksBitmapList;
 
         bitmap = bitmapList.get((int)(Math.random() * bitmapList.size()));
         isVisible = true;
-        this.x = (int)(Math.random() * (surfaceWidth - bitmap.getWidth()));
+        this.x = (int)(Math.random() * (mainActivity.surfaceWidth - bitmap.getWidth()));
         this.y = y;
-        this.surfaceWidth = surfaceWidth;
-        this.surfaceHeight = surfaceHeight;
-        this.car = car;
 
         number = (int)(Math.random() * 90) + 10;
+
         paint = new Paint();
 
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = mainActivity.getResources().getDisplayMetrics();
         float fontSizeInPixel = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE, displayMetrics);
         paint.setTextSize(fontSizeInPixel);
-        paint.setColor(context.getResources().getColor(R.color.colorPrimaryDark, null));
+        paint.setColor(mainActivity.getResources().getColor(R.color.colorPrimaryDark, null));
     }
 
     public void draw(Canvas canvas) {
-
-        if (isVisible == true && getCollisionRect().intersect(car.getCollisionRect())) {
+        if (isVisible == true && getCollisionRect().intersect(mainActivity.car.getCollisionRect())) {
             isVisible = false;
             fireworksIndex = 0;
+            if (mainActivity.scoreBoard.getAnswer() == number) {
+                number = (int) (Math.random() * 90) + 10;
+                mainActivity.scoreBoard.addScore(20);
+                mainActivity.scoreBoard.resetAnswer();
+            } else {
+                mainActivity.scoreBoard.addScore(-10);
+            }
         }
 
         if (isVisible) {
@@ -69,13 +73,16 @@ public class Balloon {
 
         y += 5;
 
-        if (y > surfaceHeight) {
-            number = (int)(Math.random() * 90) + 10;
-            x = (int)(Math.random() * (surfaceWidth - bitmap.getWidth()));
+        if (y > mainActivity.surfaceHeight) {
+            x = (int)(Math.random() * (mainActivity.surfaceWidth - bitmap.getWidth()));
             y = 0 - bitmap.getHeight();
             isVisible = true;
             bitmap = bitmapList.get((int)(Math.random() * bitmapList.size()));
         }
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public Rect getRect() {

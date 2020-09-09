@@ -22,8 +22,17 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private SurfaceHolder surfaceHolder;
     private boolean isRunning;
     private int hitCount;
+
     public GameMode gameMode;
     public int surfaceWidth, surfaceHeight;
+    public Car car;
+    public ScoreBoard scoreBoard;
+    public Balloons balloons;
+    public Obstacle obstacle;
+    public GameStart gameStart;
+    public GameCompleted gameCompleted;
+    public Pedal accellerator, brake;
+    public Jump jump;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +94,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private class GamePlayThread extends Thread {
-        private GameStart gameStart;
-        private GameCompleted gameCompleted;
-        private Pedal accellerator, brake;
-        private Jump jump;
-        private Car car;
-
         public void press(boolean press, int x, int y) {
             switch (gameMode) {
                 case Ready:
@@ -135,14 +138,16 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
             Mountain mountain = new Mountain(MainActivity.this, surfaceHeight);
             gameStart = new GameStart(MainActivity.this, surfaceWidth, surfaceHeight);
-            gameCompleted = new GameCompleted(MainActivity.this, surfaceWidth, surfaceHeight);
+            gameCompleted = new GameCompleted(MainActivity.this);
             accellerator = new Pedal(MainActivity.this, 10, 500, R.drawable.accellerator, R.drawable.accellerator_pressed);
             brake = new Pedal(MainActivity.this, 200, 500, R.drawable.brake, R.drawable.brake_pressed);
             jump = new Jump(MainActivity.this, 400, 500);
             car = new Car(MainActivity.this, accellerator, brake, surfaceHeight);
-            Balloons balloons = new Balloons(MainActivity.this, 8, surfaceWidth, surfaceHeight, car);
-            Obstacle obstacle = new Obstacle(MainActivity.this, surfaceWidth, surfaceHeight, car);
+            scoreBoard = new ScoreBoard(MainActivity.this);
+            balloons = new Balloons(MainActivity.this, 8);
+            obstacle = new Obstacle(MainActivity.this, surfaceWidth, surfaceHeight, car);
 
+            scoreBoard.resetAnswer();
             while (isRunning) {
                 Canvas canvas = surfaceHolder.lockCanvas();
                 if (canvas != null) {
@@ -159,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                             brake.draw(canvas);
                             jump.draw(canvas);
                             obstacle.draw(canvas);
+                            scoreBoard.draw(canvas);
                             break;
                         case Completed:
                             gameCompleted.draw(canvas);
