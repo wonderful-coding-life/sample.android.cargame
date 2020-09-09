@@ -47,7 +47,7 @@ public class Balloon {
     }
 
     public void draw(Canvas canvas) {
-        if (isVisible == true && getCollisionRect().intersect(mainActivity.car.getCollisionRect())) {
+        if (isVisible == true && getCollisionRect().intersect(mainActivity.car.getCollisionRect(0.7))) {
             isVisible = false;
             fireworksIndex = 0;
             if (mainActivity.scoreBoard.getAnswer() == number) {

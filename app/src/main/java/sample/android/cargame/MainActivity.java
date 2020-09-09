@@ -136,16 +136,16 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             Paint skyPaint = new Paint();
             skyPaint.setColor(getResources().getColor(R.color.colorSky, null));
 
-            Mountain mountain = new Mountain(MainActivity.this, surfaceHeight);
-            gameStart = new GameStart(MainActivity.this, surfaceWidth, surfaceHeight);
+            Mountain mountain = new Mountain(MainActivity.this);
+            gameStart = new GameStart(MainActivity.this);
             gameCompleted = new GameCompleted(MainActivity.this);
             accellerator = new Pedal(MainActivity.this, 10, 500, R.drawable.accellerator, R.drawable.accellerator_pressed);
             brake = new Pedal(MainActivity.this, 200, 500, R.drawable.brake, R.drawable.brake_pressed);
             jump = new Jump(MainActivity.this, 400, 500);
-            car = new Car(MainActivity.this, accellerator, brake, surfaceHeight);
+            car = new Car(MainActivity.this);
             scoreBoard = new ScoreBoard(MainActivity.this);
             balloons = new Balloons(MainActivity.this, 8);
-            obstacle = new Obstacle(MainActivity.this, surfaceWidth, surfaceHeight, car);
+            obstacle = new Obstacle(MainActivity.this);
 
             scoreBoard.resetAnswer();
             while (isRunning) {

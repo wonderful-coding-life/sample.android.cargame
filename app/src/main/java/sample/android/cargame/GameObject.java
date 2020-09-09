@@ -30,6 +30,10 @@ public class GameObject {
         this.bitmap = bitmap;
     }
 
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
     public int getX() {
         return (int)x;
     }
@@ -38,9 +42,51 @@ public class GameObject {
         return (int)y;
     }
 
-    public void setXY(int x, int y) {
+    public int getWidth() {
+        if (bitmap != null) {
+            return bitmap.getWidth();
+        }
+        return 0;
+    }
+
+    public int getHeight() {
+        if (bitmap != null) {
+            return bitmap.getHeight();
+        }
+        return 0;
+    }
+
+    public void moveX(int x) {
+        this.x += x;
+    }
+
+    public void moveXdp(int x) {
+        this.x += TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, x, context.getResources().getDisplayMetrics());
+    }
+
+    public void moveY(int y) {
+        this.y += y;
+    }
+
+    public void moveYdp(int y) {
+        this.y += TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, y, context.getResources().getDisplayMetrics());
+    }
+
+    public void setXYdp(int x, int y) {
         this.x = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, x, context.getResources().getDisplayMetrics());
         this.y = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, y, context.getResources().getDisplayMetrics());
+    }
+
+    public void setXY(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public boolean isHit(int x, int y) {
+        if (bitmap != null && this.x < x && x < this.x + bitmap.getWidth() && this.y < y && y < this.y + bitmap.getHeight()) {
+            return true;
+        }
+        return false;
     }
 
     public void alignCenter() {

@@ -5,31 +5,27 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-public class GameStart {
+public class GameStart extends GameObject {
     private Bitmap bitmap, bitmapNoMessage;
-    private int x, y;
     private long startTimestamp;
 
-    public GameStart(Context context, int surfaceWidth, int surfaceHeight) {
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.game_start);
-        bitmapNoMessage = BitmapFactory.decodeResource(context.getResources(), R.drawable.game_start_no_message);
-        x = (surfaceWidth - bitmap.getWidth()) / 2;
-        y = (surfaceHeight - bitmap.getHeight()) / 2;
+    public GameStart(MainActivity mainActivity) {
+        super(mainActivity, mainActivity.surfaceWidth, mainActivity.surfaceHeight);
+
+        bitmap = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.game_start);
+        bitmapNoMessage = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.game_start_no_message);
+        setBitmap(bitmap);
+        alignCenter();
+
         startTimestamp = System.currentTimeMillis();
     }
 
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         if (((System.currentTimeMillis() - startTimestamp) / 1000) % 2 == 0) {
-            canvas.drawBitmap(bitmap, x, y, null);
+            setBitmap(bitmap);
         } else {
-            canvas.drawBitmap(bitmapNoMessage, x, y, null);
+            setBitmap(bitmapNoMessage);
         }
-    }
-
-    public boolean isHit(int x, int y) {
-        if (this.x < x && x < this.x + bitmap.getWidth() && this.y < y && y < this.y + bitmap.getHeight()) {
-            return true;
-        }
-        return false;
     }
 }

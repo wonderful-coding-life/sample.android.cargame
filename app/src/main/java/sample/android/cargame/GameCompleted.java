@@ -1,13 +1,8 @@
 package sample.android.cargame;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.TypedValue;
 
 public class GameCompleted extends GameObject {
     private MainActivity mainActivity;
@@ -25,7 +20,7 @@ public class GameCompleted extends GameObject {
 
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        drawText(canvas, mainActivity.scoreBoard.getScore() + " 점",  36, 128, 42, Color.BLACK);
+        drawText(canvas, mainActivity.scoreBoard.getScore() + " 점",  48, 120, 36, Color.BLACK);
     }
 
     public boolean isHitBack(int x, int y) {

@@ -14,7 +14,7 @@ public class ScoreBoard extends GameObject {
         super(mainActivity, mainActivity.surfaceWidth, mainActivity.surfaceHeight);
         this.mainActivity = mainActivity;
         setBitmap(R.drawable.score_board);
-        setXY(10, 30);
+        setXYdp(10, 30);
         score = 0;
     }
 

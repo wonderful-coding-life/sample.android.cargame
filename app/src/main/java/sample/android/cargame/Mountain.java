@@ -1,6 +1,5 @@
 package sample.android.cargame;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,11 +8,11 @@ public class Mountain {
     private Bitmap mountainBitmap;
     private int mountain1X, mountain2X, mountainY;
 
-    public Mountain(Context context, int surfaceHeight) {
-        mountainBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mountain);
+    public Mountain(MainActivity mainActivity) {
+        mountainBitmap = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.mountain);
         mountain1X = 0;
         mountain2X = mountainBitmap.getWidth();
-        mountainY = surfaceHeight - mountainBitmap.getHeight();
+        mountainY = mainActivity.surfaceHeight - mountainBitmap.getHeight();
     }
 
     public void draw(Canvas canvas) {
